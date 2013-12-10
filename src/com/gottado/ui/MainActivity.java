@@ -261,25 +261,17 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState)
-	{
+	protected void onPostCreate(Bundle savedInstanceState){
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
+	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
-	}
-	
-	@Override
-	protected void onResume() {
-		initList();
-		super.onResume();
 	}
 	
 	public void clearExpiredTasksDialog() {
@@ -326,5 +318,11 @@ public class MainActivity extends ActionBarActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+    
+    @Override
+	protected void onResume() {
+		initList();
+		super.onResume();
 	}
 }
