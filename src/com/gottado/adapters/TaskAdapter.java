@@ -2,6 +2,8 @@ package com.gottado.adapters;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Dialog;
@@ -20,6 +22,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gottado.R;
@@ -36,12 +39,15 @@ public class TaskAdapter extends BaseAdapter {
 	private List<Task> items = new ArrayList<Task>();
 	private Context ctx;
 	private DAO db;
-	private SimpleDateFormat dateFormat = MyDateFormatter.getInstance().getDateFormat();	
+	private SimpleDateFormat dateFormat = MyDateFormatter.getInstance().getDateFormat();
+	private Date now = null;
 	public TaskAdapter(Context context, List<Task> items) {
 		mInflater = LayoutInflater.from(context);
 		this.items = items;
 		this.ctx = context;
 		db = LocalDAO.getInstance(context);
+		Calendar cal = Calendar.getInstance();
+		now = cal.getTime();
 	}
 	public int getCount() {
 		return items.size();
@@ -65,6 +71,7 @@ public class TaskAdapter extends BaseAdapter {
 			holder.priority = (TextView) convertView.findViewById(R.id.taskPriority);
 			holder.isCompleted = (ImageView) convertView.findViewById(R.id.taskCompleted);
 			holder.popup = (ImageView) convertView.findViewById(R.id.taskPopup);
+			holder.rl = (RelativeLayout) convertView.findViewById(R.id.taskHolder);
 			convertView.setTag(holder);
 		} else { holder = (ViewHolder) convertView.getTag(); }
 		String title = t.getTitle();
@@ -76,7 +83,13 @@ public class TaskAdapter extends BaseAdapter {
 		// holder.category.setText(t.getCategory());
 		StringBuilder sb = new StringBuilder();
 		sb.append(ctx.getResources().getString(R.string.due_date_));
-		sb.append(dateFormat.format(t.getDueDate()));
+		
+		// if the date has a MAX value, the user hasn't set an end date for the task
+		if(Long.MAX_VALUE-t.getDueDate().getTime()<1000){
+			sb.append("N/A");
+		} else {
+			sb.append(dateFormat.format(t.getDueDate()));
+		}
 		holder.dueDate.setText(sb.toString());
 		holder.priority.setText(ctx.getResources().getString(R.string.priority_)+t.getPriority().name());
 		if(t.getPriority()==Priority.LOW){
@@ -123,6 +136,12 @@ public class TaskAdapter extends BaseAdapter {
 			}
 		});
 		
+		
+		//if(now.compareTo(t.getDueDate())>0){
+		if(now.getTime()>t.getDueDate().getTime()){
+			holder.rl.setBackgroundResource(R.drawable.bg_card_expired);
+		} else holder.rl.setBackgroundResource(R.drawable.bg_card);
+		
 		AnimationSet set = new AnimationSet(true);
         Animation animation = new AlphaAnimation(0.0f, 1.0f);
         animation.setDuration(600);
@@ -156,5 +175,6 @@ public class TaskAdapter extends BaseAdapter {
 		ImageView isCompleted;
 		ImageView popup;
 		TextView category;
+		RelativeLayout rl;
 	}
 }

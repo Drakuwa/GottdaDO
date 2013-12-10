@@ -3,6 +3,7 @@ package com.gottado.dao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -138,7 +139,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		ContentValues values = new ContentValues();
 		values.put(DatabaseHelper.KEY_TITLE, t.getTitle());
 		values.put(DatabaseHelper.KEY_DESCRIPTION, t.getDescription());
-		values.put(DatabaseHelper.KEY_DATE, dateFormat.format(t.getDueDate()));
+		if(null != t.getDueDate())
+			values.put(DatabaseHelper.KEY_DATE, dateFormat.format(t.getDueDate()));
+		else values.put(DatabaseHelper.KEY_DATE, dateFormat.format(new Date(Long.MAX_VALUE)));
 		values.put(DatabaseHelper.KEY_PRIORITY, t.getPriority().getCustomOrdinal());
 		values.put(DatabaseHelper.KEY_COMPLETED, t.isCompleted()); // should be false
 		values.put(DatabaseHelper.KEY_CATEGORY, t.getCategory());

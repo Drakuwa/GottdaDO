@@ -21,6 +21,12 @@
         <item>MEDIUM</item>
         <item>HIGH</item>
     </string-array>
+    <string-array name="drawer_options">
+        <item>Show all</item>
+        <item>Due today</item>
+        <item>Show unfinished</item>
+        <item>Show completed</item>
+    </string-array>
 
     <string name="save">Save</string>
     <string name="no_content">There are no items in your GottaDO list. You can add one by choosing the plus sign from the title bar</string>
@@ -33,5 +39,11 @@
     <string name="no_completed">There are no completed tasks in the list.</string>
     <string name="action_show_unfinished">Show unfinished</string>
     <string name="no_unfinished">There are no unfinished tasks in the list.</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="exit">Exit</string>
+    <string name="action_sort_by_priority">Sort by priority</string>
+    <string name="action_sort_by_date">Sort by date</string>
+    <string name="action_clear_sorting">Clear sorting</string>
 
 </resources>

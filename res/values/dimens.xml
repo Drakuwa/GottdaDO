@@ -10,5 +10,6 @@
     <dimen name="task_item_height">160dp</dimen>
     <dimen name="add_task_dialog">400dp</dimen>
     <dimen name="separator">0.3dp</dimen>
+    <dimen name="drawer_width">280dp</dimen>
 
 </resources>

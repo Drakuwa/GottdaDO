@@ -8,24 +8,24 @@
         android:title="@string/action_settings"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_sort"
+        android:id="@+id/action_sort_priority"
         android:orderInCategory="101"
-        android:title="@string/action_sort"
+        android:title="@string/action_sort_by_priority"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_completed"
+        android:id="@+id/action_sort_date"
         android:orderInCategory="102"
-        android:title="@string/action_show_completed"
+        android:title="@string/action_sort_by_date"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_pending"
+        android:id="@+id/action_sort_clear"
         android:orderInCategory="103"
-        android:title="@string/action_show_unfinished"
+        android:title="@string/action_clear_sorting"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_all"
+        android:id="@+id/action_exit"
         android:orderInCategory="104"
-        android:title="@string/action_show_all"
+        android:title="@string/exit"
         app:showAsAction="never"/>
 
 </menu>
