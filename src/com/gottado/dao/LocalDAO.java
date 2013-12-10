@@ -3,6 +3,7 @@ package com.gottado.dao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 				+ "(" + DatabaseHelper.KEY_ID + " INTEGER PRIMARY KEY,"
 				+ DatabaseHelper.KEY_TITLE + " TEXT, "
 				+ DatabaseHelper.KEY_DESCRIPTION + " TEXT, "
-				+ DatabaseHelper.KEY_DATE + " DATE, "
+				+ DatabaseHelper.KEY_DATE + " DATETIME, "
 				+ DatabaseHelper.KEY_PRIORITY + " INTEGER, "
 				+ DatabaseHelper.KEY_COMPLETED + " BOOLEAN, "
 				+ DatabaseHelper.KEY_CATEGORY + " TEXT )";
@@ -208,5 +209,27 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		}
 		db.close();
 		return tasksList;
+	}
+
+	@Override
+	public void clearExpiredTasks() {
+		SQLiteDatabase db = this.getWritableDatabase();		
+		Calendar cal = Calendar.getInstance();
+		Date now = cal.getTime();
+		db.delete(TABLE_TASKS, "Datetime("+DatabaseHelper.KEY_DATE+")" + " < ?",
+				new String[] { "Datetime('"+dateFormat.format(now)+"')" });
+		//String deleteQuery = "DELETE FROM "+TABLE_TASKS
+		//	+" WHERE Datetime("+DatabaseHelper.KEY_DATE+") " +
+		//		"< Datetime('"+dateFormat.format(now)+"')";
+		//db.rawQuery(deleteQuery, null);
+		db.close();		
+	}
+	
+	@Override
+	public void clearCompletedTasks() {
+		SQLiteDatabase db = this.getWritableDatabase();		
+		db.delete(TABLE_TASKS, DatabaseHelper.KEY_COMPLETED + " = ?",
+				new String[] { "1" });
+		db.close();		
 	}
 }

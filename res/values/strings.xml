@@ -45,5 +45,11 @@
     <string name="action_sort_by_priority">Sort by priority</string>
     <string name="action_sort_by_date">Sort by date</string>
     <string name="action_clear_sorting">Clear sorting</string>
+    <string name="clear_expired">Are you sure you want to delete all expired tasks?</string>
+    <string name="yes">YES</string>
+    <string name="cancel">Cancel</string>
+    <string name="action_delete_expired">Delete expired</string>
+    <string name="action_delete_completed">Delete completed</string>
+    <string name="clear_completed">Are you sure you want to delete all completed tasks?</string>
 
 </resources>

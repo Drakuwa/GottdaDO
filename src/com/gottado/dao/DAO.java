@@ -21,4 +21,8 @@ public interface DAO {
 	public void deleteTask(Task t);
 	
 	public List<Task> getAllCompletedTasks(boolean finished) throws ParseException;
+	
+	public void clearExpiredTasks();
+	
+	public void clearCompletedTasks();
 }

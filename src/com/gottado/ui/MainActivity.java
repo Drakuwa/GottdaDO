@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -213,6 +214,12 @@ public class MainActivity extends ActionBarActivity {
 	            });
 	        	sta.notifyDataSetChanged();
 	            return true;
+	        case R.id.action_clear_completed:
+	        	clearCompletedTasksDialog();
+	            return true;
+	        case R.id.action_clear_expired:
+	        	clearExpiredTasksDialog();
+	            return true;
 	        case R.id.action_exit:
 	        	finish();
 	            return true;
@@ -273,5 +280,51 @@ public class MainActivity extends ActionBarActivity {
 	protected void onResume() {
 		initList();
 		super.onResume();
+	}
+	
+	public void clearExpiredTasksDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.clear_expired)
+				.setIcon(R.drawable.ic_launcher)
+				.setTitle(R.string.app_name)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								db.clearExpiredTasks();
+								initList();
+						}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+				}
+		});
+		AlertDialog alert = builder.create();
+		try {
+			alert.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public void clearCompletedTasksDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.clear_completed)
+				.setIcon(R.drawable.ic_launcher)
+				.setTitle(R.string.app_name)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								db.clearCompletedTasks();
+								initList();
+						}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+				}
+		});
+		AlertDialog alert = builder.create();
+		try {
+			alert.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

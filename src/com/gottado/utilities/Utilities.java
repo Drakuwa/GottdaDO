@@ -18,6 +18,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.gottado.R;
+import com.gottado.dao.DAO;
+import com.gottado.dao.LocalDAO;
 
 /**
  * A model class that resolves some of the business logic in the application.
@@ -192,4 +194,50 @@ public class Utilities {
     finally { try { is.close(); } catch (IOException e) { e.printStackTrace(); }}
     return sb.toString();
     }
+    
+    public static void clearExpiredTasksDialog(Context ctx) {
+    	final DAO db = LocalDAO.getInstance(ctx);
+		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+		builder.setMessage(R.string.clear_expired)
+				.setIcon(R.drawable.ic_launcher)
+				.setTitle(R.string.app_name)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								db.clearExpiredTasks();
+						}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+				}
+		});
+		AlertDialog alert = builder.create();
+		try {
+			alert.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public static void clearCompletedTasksDialog(Context ctx) {
+    	final DAO db = LocalDAO.getInstance(ctx);
+		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+		builder.setMessage(R.string.clear_completed)
+				.setIcon(R.drawable.ic_launcher)
+				.setTitle(R.string.app_name)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								db.clearCompletedTasks();
+						}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+				}
+		});
+		AlertDialog alert = builder.create();
+		try {
+			alert.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

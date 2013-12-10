@@ -23,8 +23,18 @@
         android:title="@string/action_clear_sorting"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_exit"
+        android:id="@+id/action_clear_expired"
         android:orderInCategory="104"
+        android:title="@string/action_delete_expired"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_clear_completed"
+        android:orderInCategory="105"
+        android:title="@string/action_delete_completed"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="106"
         android:title="@string/exit"
         app:showAsAction="never"/>
 

@@ -1,8 +1,6 @@
 - due today
 - full text search through titles and descriptions 
 - background service and notifications
-- clear all completed tasks? "DELETE FROM "+TABLE_TASKS+" WHERE "+DatabaseHelper.KEY_COMPLETED+" LIKE 1";
-- clear all past tasks? Tasks that have expired
 
 Optional
 - add GottaDO task widget
