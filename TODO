@@ -1,0 +1,5 @@
+- due today
+- sort by priority and due date
+- full text search through titles and descriptions 
+- background service and notifications
+- clear all finished tasks? "DELETE FROM "+TABLE_TASKS+" WHERE "+DatabaseHelper.KEY_COMPLETED+" LIKE 1";

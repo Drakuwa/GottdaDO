@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background">#E9E9E9</color>
+    <color name="black">#FF000000</color>
+    <color name="titleGrey">#202020</color>
+    <color name="descriptionGrey">#666</color>
+    <color name="darkRed">#AA0000</color>
+    <color name="white">#FFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="yellow">#F2E015</color>
+    <color name="orange">#F27935</color>
+    <color name="green">#50B845</color>
+    <color name="grey">#E7E7E8</color>
+    <color name="lightGrey">#F2F3F3</color>
+
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GottaDO</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="test_description">This is an example long description of the task that I want to show&#8230;</string>
+    <string name="test_priority_high">Priority: HIGH</string>
+    <string name="test_title">This is a long TODO task title text</string>
+    <string name="no_title">No title</string>
+    <string name="no_description">No description</string>
+    <string name="priority_">"Priority: "</string>
+    <string name="due_date_">"Due date: "</string>
+    <string name="choose_date">Choose date</string>
+    <string name="title">Title</string>
+    <string name="task_decription">Task decription..</string>
+    <string name="add_task">Add Task</string>
+
+    <string-array name="priority_spinner">
+        <item>LOW</item>
+        <item>MEDIUM</item>
+        <item>HIGH</item>
+    </string-array>
+
+    <string name="save">Save</string>
+    <string name="no_content">There are no items in your GottaDO list. You can add one by choosing the plus sign from the title bar</string>
+    <string name="n_a">N/A</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_show_completed">Show completed</string>
+    <string name="delete">Delete</string>
+    <string name="modify">Modify</string>
+    <string name="action_show_all">Show all</string>
+    <string name="no_completed">There are no completed tasks in the list.</string>
+    <string name="action_show_unfinished">Show unfinished</string>
+    <string name="no_unfinished">There are no unfinished tasks in the list.</string>
+
+</resources>

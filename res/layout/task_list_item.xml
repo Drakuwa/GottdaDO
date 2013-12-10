@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/taskHolder"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/task_item_height"
+    android:background="@drawable/bg_card"
+    android:minHeight="@dimen/task_item_height" >
+
+    <TextView
+        android:id="@+id/taskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/taskPopup"
+        android:text="@string/test_title"
+        android:textColor="@color/titleGrey"
+        android:textSize="@dimen/text_title"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/taskPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/hello_world"
+        android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_light" />
+
+    <TextView
+        android:id="@+id/taskDesctiption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/taskTitle"
+        android:layout_toLeftOf="@+id/taskPriority"
+        android:text="@string/test_description"
+        android:textColor="@color/descriptionGrey"
+        android:textSize="@dimen/text_description"
+        android:textStyle="normal" />
+
+    <ImageView
+        android:id="@+id/taskCompleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/taskPriority"
+        android:layout_alignRight="@+id/taskPriority"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/hello_world"
+        android:src="@drawable/check_not" />
+
+    <TextView
+        android:id="@+id/taskDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/taskDesctiption"
+        android:layout_alignParentBottom="true"
+        android:text="@string/hello_world"
+        android:textColor="@color/green"
+        android:textSize="@dimen/text_date"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/taskPriority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/test_priority_high"
+        android:textColor="@color/darkRed"
+        android:textSize="@dimen/text_date"
+        android:textStyle="normal" />
+
+</RelativeLayout>
