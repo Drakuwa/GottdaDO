@@ -216,8 +216,8 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		SQLiteDatabase db = this.getWritableDatabase();		
 		Calendar cal = Calendar.getInstance();
 		Date now = cal.getTime();
-		db.delete(TABLE_TASKS, "Datetime("+DatabaseHelper.KEY_DATE+")" + " < ?",
-				new String[] { "Datetime('"+dateFormat.format(now)+"')" });
+		db.delete(TABLE_TASKS, "Datetime("+DatabaseHelper.KEY_DATE+") < Datetime('"+dateFormat.format(now)+"')",
+				new String[] {});
 		//String deleteQuery = "DELETE FROM "+TABLE_TASKS
 		//	+" WHERE Datetime("+DatabaseHelper.KEY_DATE+") " +
 		//		"< Datetime('"+dateFormat.format(now)+"')";
