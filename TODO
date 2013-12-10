@@ -3,3 +3,9 @@
 - full text search through titles and descriptions 
 - background service and notifications
 - clear all finished tasks? "DELETE FROM "+TABLE_TASKS+" WHERE "+DatabaseHelper.KEY_COMPLETED+" LIKE 1";
+
+Optional
+- add GottaDO task widget
+- missed call -> add to GottaDO
+- tag people (contacts) in GottaDO tasks
+- location based tasks
