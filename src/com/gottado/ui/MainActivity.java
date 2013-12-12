@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -24,24 +23,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gottado.R;
 import com.gottado.adapters.TaskAdapter;
 import com.gottado.dao.DAO;
 import com.gottado.dao.LocalDAO;
 import com.gottado.dom.Task;
+import com.gottado.utilities.CallBackListener;
 import com.gottado.utilities.Log;
+import com.gottado.utilities.Utilities;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements CallBackListener {
 	
 	private TextView noContent;
 	private List<Task> tasks = new ArrayList<Task>();
 	private TaskAdapter sta;
 	private ListView lv;
 	private DAO db;
-	private String status = "All tasks";
-	private TextView statusTextView, count;
+	private Utilities u = new Utilities(this);
+	public static String status = "All tasks";
+	private TextView statusTextView;
+	private static TextView count;
 	
 	private DrawerLayout			mDrawerLayout;
 	private ListView				mDrawerList;
@@ -59,53 +61,81 @@ public class MainActivity extends ActionBarActivity {
 		// set the drawer
 		initDrawer();
 		
+		// initialize the other views
+		initViews();
+		
 		// get the db instance
 		db = LocalDAO.getInstance(this);
-		noContent = (TextView) findViewById(R.id.taskNoContent);
 		
+		// set the callback listener to Utilities
+		u.setListener(this);
+		
+		// initialize the list view
+		initListView();
+		updateList();
+	}
+	
+	private void initViews(){
+		count = (TextView) findViewById(R.id.taskStatusCount);
+		noContent = (TextView) findViewById(R.id.taskNoContent);
+		statusTextView = (TextView) findViewById(R.id.taskStatus);
+		statusTextView.setText(status);
+	}
+	
+	private void initListView(){
 		// GET THE LIST
 		lv = (ListView) findViewById(R.id.tasksList);
 		lv.setTextFilterEnabled(true);
 		
-		count = (TextView) findViewById(R.id.taskStatusCount);
-		statusTextView = (TextView) findViewById(R.id.taskStatus);
-		statusTextView.setText(status);
+		// CREATE BASE ADAPTER
+		sta = new TaskAdapter(MainActivity.this, tasks);
 		
-		initList();
+		// SET AS CURRENT LIST
+		lv.setAdapter(sta);
 	}
 	
-	private void initList(){
+	private void updateList(){
 		// GET YOUR TASKS
 		tasks.clear();
 		try {
 			if(status.equals("All tasks")){
-				tasks = db.getAllTasks();
+				tasks.addAll(db.getAllTasks());
 				if(tasks.size()==0){
 					noContent.setText(R.string.no_content);
 					noContent.setVisibility(View.VISIBLE);
 				} else noContent.setVisibility(View.GONE);
 			} else if(status.equals("Completed tasks")){
-				tasks = db.getAllCompletedTasks(true);
+				tasks.addAll(db.getAllCompletedTasks(true));
 				if(tasks.size()==0){
     				noContent.setText(R.string.no_completed);
     				noContent.setVisibility(View.VISIBLE);
     			} else noContent.setVisibility(View.GONE);
 			} else if(status.equals("Pending tasks")){
-				tasks = db.getAllCompletedTasks(false);
+				tasks.addAll(db.getAllCompletedTasks(false));
 				if(tasks.size()==0){
     				noContent.setText(R.string.no_unfinished);
     				noContent.setVisibility(View.VISIBLE);
     			} else noContent.setVisibility(View.GONE);
+			} else if(status.equals("Todays tasks")){
+				tasks.addAll(db.getAllTasksDueToday());
+				if(tasks.size()==0){
+    				noContent.setText(R.string.no_today);
+    				noContent.setVisibility(View.VISIBLE);
+    			} else noContent.setVisibility(View.GONE);
+			} else if(status.equals("Priority filtered tasks")){
+				// if we have priority filtered view, and add a task, show all after
+				status = "All tasks";statusTextView.setText(status);
+				tasks.addAll(db.getAllTasks());
+				if(tasks.size()==0){
+					noContent.setText(R.string.no_content);
+					noContent.setVisibility(View.VISIBLE);
+				} else noContent.setVisibility(View.GONE);
 			}
 		} catch (ParseException e) {
 			Log.e(Log.TAG, e.getLocalizedMessage());
 		}
-		// CREATE BASE ADAPTER
-		sta = new TaskAdapter(MainActivity.this, tasks);
-		count.setText(String.valueOf(tasks.size()));
-		
-		// SET AS CURRENT LIST
-		lv.setAdapter(sta);
+		sta.notifyDataSetChanged();
+		count.setText(String.valueOf(tasks.size()));	
 	}
 	
 	private void initDrawer(){
@@ -215,10 +245,10 @@ public class MainActivity extends ActionBarActivity {
 	        	sta.notifyDataSetChanged();
 	            return true;
 	        case R.id.action_clear_completed:
-	        	clearCompletedTasksDialog();
+	        	u.clearCompletedTasksDialog();
 	            return true;
 	        case R.id.action_clear_expired:
-	        	clearExpiredTasksDialog();
+	        	u.clearExpiredTasksDialog();
 	            return true;
 	        case R.id.action_exit:
 	        	finish();
@@ -228,10 +258,19 @@ public class MainActivity extends ActionBarActivity {
 	    }
 	}
 	
+	/**
+	 * If we delete a task, reduce the counter by 1
+	 */
+	public static void reduceTaskCounter(){
+		int currentCount = Integer.parseInt(count.getText().toString());
+		currentCount--;
+		count.setText(String.valueOf(currentCount));
+	}
+	
 	private Dialog getDialog(){
 		final Dialog dialog = new Dialog(this);
     	dialog.setOnDismissListener(new OnDismissListener() {
-		@Override public void onDismiss(DialogInterface dialog) {initList();}});
+		@Override public void onDismiss(DialogInterface dialog) {updateList();}});
     	return dialog;
 	}
 	
@@ -241,16 +280,19 @@ public class MainActivity extends ActionBarActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id){
             if(mDrawerOptions[position].equals("Show all")){
             	status = "All tasks";statusTextView.setText(status);
-            	initList();
+            	updateList();
             } else if(mDrawerOptions[position].equals("Due today")){
-            	// TODO
-            	Toast.makeText(getApplicationContext(), mDrawerOptions[position], Toast.LENGTH_SHORT).show();
+            	status = "Todays tasks";statusTextView.setText(status);
+            	updateList();
             } else if(mDrawerOptions[position].equals("Show unfinished")){
             	status = "Pending tasks";statusTextView.setText(status);
-            	initList();
+            	updateList();
+            } else if(mDrawerOptions[position].equals("Show by priority")){
+            	status = "Priority filtered tasks";statusTextView.setText(status);
+        		u.showTasksByPriorityDialog();
             } else if(mDrawerOptions[position].equals("Show completed")){
             	status = "Completed tasks";statusTextView.setText(status);
-            	initList();
+            	updateList();
             }
 			
 			// update selected item and title, then close the drawer
@@ -273,56 +315,27 @@ public class MainActivity extends ActionBarActivity {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
-	
-	public void clearExpiredTasksDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.clear_expired)
-				.setIcon(R.drawable.ic_launcher)
-				.setTitle(R.string.app_name)
-				.setPositiveButton(R.string.yes,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								db.clearExpiredTasks();
-								initList();
-						}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-				}
-		});
-		AlertDialog alert = builder.create();
-		try {
-			alert.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-    
-    public void clearCompletedTasksDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.clear_completed)
-				.setIcon(R.drawable.ic_launcher)
-				.setTitle(R.string.app_name)
-				.setPositiveButton(R.string.yes,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								db.clearCompletedTasks();
-								initList();
-						}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-				}
-		});
-		AlertDialog alert = builder.create();
-		try {
-			alert.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
     
     @Override
 	protected void onResume() {
-		initList();
+    	updateList();
 		super.onResume();
+	}
+
+	@Override
+	public void callback(List<Task> tasks, String priority) {
+		this.tasks.clear();
+		this.tasks.addAll(tasks);
+		if(tasks.size()==0){
+			noContent.setText(getResources().getString(R.string.no_priority)+" "+priority+" priority.");
+			noContent.setVisibility(View.VISIBLE);
+		} else noContent.setVisibility(View.GONE);
+		sta.notifyDataSetChanged();
+		count.setText(String.valueOf(tasks.size()));
+	}
+
+	@Override
+	public void callback() {
+		updateList();		
 	}
 }

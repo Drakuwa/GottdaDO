@@ -1,12 +1,9 @@
 package com.gottado.utilities;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.Comparator;
 import java.util.Map;
 
@@ -177,25 +174,19 @@ public class Utilities {
 		}
 		return hash;
 	}
-	
-	/**
-     * convert the given input stream into a string
-     * @param is
-     * @return
-     */
-    public static String convertStreamToString(InputStream is) {
 
-    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-    StringBuilder sb = new StringBuilder();
-
-    String line = null;
-    try { while ((line = reader.readLine()) != null) { sb.append(line + "\n"); }
-    } catch (IOException e) { e.printStackTrace(); }
-    finally { try { is.close(); } catch (IOException e) { e.printStackTrace(); }}
-    return sb.toString();
+    // set the callback listener
+    CallBackListener mListener;
+    public void setListener(CallBackListener listener){
+            mListener = listener;
     }
     
-    public static void clearExpiredTasksDialog(Context ctx) {
+    /**
+     * Show an alert dialog warning the user that he is about to
+     * delete all expired tasks from the application. Expired tasks
+     * are considered to be task which have passed their due date.
+     */
+    public void clearExpiredTasksDialog() {
     	final DAO db = LocalDAO.getInstance(ctx);
 		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
 		builder.setMessage(R.string.clear_expired)
@@ -205,6 +196,8 @@ public class Utilities {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								db.clearExpiredTasks();
+								// execute callback
+		                        mListener.callback();
 						}
 				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
@@ -218,7 +211,11 @@ public class Utilities {
 		}
 	}
     
-    public static void clearCompletedTasksDialog(Context ctx) {
+    /**
+     * Show an alert dialog warning the user that he is about to
+     * delete all completed tasks from the application.
+     */
+    public void clearCompletedTasksDialog() {
     	final DAO db = LocalDAO.getInstance(ctx);
 		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
 		builder.setMessage(R.string.clear_completed)
@@ -228,6 +225,8 @@ public class Utilities {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								db.clearCompletedTasks();
+								// execute callback
+		                        mListener.callback();
 						}
 				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
@@ -240,4 +239,35 @@ public class Utilities {
 			e.printStackTrace();
 		}
 	}
+    
+    /**
+     * Show a dialog from which the user can choose the priority of
+     * the task that he wants shown
+     */
+    public void showTasksByPriorityDialog(){
+    	final DAO db = LocalDAO.getInstance(ctx);
+    	final String [] priorities = ctx.getResources().getStringArray(R.array.priority_spinner);;
+    	AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        builder.setTitle(R.string.show_by_priority)
+        		.setIcon(R.drawable.ic_launcher)
+               .setItems(priorities, new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                   // The 'which' argument contains the index position
+                   // of the selected item
+                	   
+                	// execute callback
+                	try {
+                		mListener.callback(db.getAllTasksByPriority(priorities[which]), priorities[which]);
+					} catch (ParseException e) {
+						Log.e(Log.TAG, e.getLocalizedMessage());
+					}
+               }
+        });
+        AlertDialog alert = builder.create();
+		try {
+			alert.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
 }

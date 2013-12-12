@@ -25,6 +25,7 @@
         <item>Show all</item>
         <item>Due today</item>
         <item>Show unfinished</item>
+        <item>Show by priority</item>
         <item>Show completed</item>
     </string-array>
 
@@ -39,6 +40,8 @@
     <string name="no_completed">There are no completed tasks in the list.</string>
     <string name="action_show_unfinished">Show unfinished</string>
     <string name="no_unfinished">There are no unfinished tasks in the list.</string>
+    <string name="no_today">There are no tasks in the list due today.</string>
+    <string name="no_priority">There are no tasks in the list with </string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="exit">Exit</string>
@@ -51,5 +54,6 @@
     <string name="action_delete_expired">Delete expired</string>
     <string name="action_delete_completed">Delete completed</string>
     <string name="clear_completed">Are you sure you want to delete all completed tasks?</string>
+    <string name="show_by_priority">Show by priority</string>
 
 </resources>

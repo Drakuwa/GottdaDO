@@ -31,6 +31,7 @@ import com.gottado.dao.LocalDAO;
 import com.gottado.dom.Priority;
 import com.gottado.dom.Task;
 import com.gottado.ui.AddOrModifyTaskDialog;
+import com.gottado.ui.MainActivity;
 import com.gottado.utilities.MyDateFormatter;
 
 public class TaskAdapter extends BaseAdapter {
@@ -108,34 +109,43 @@ public class TaskAdapter extends BaseAdapter {
 				if(t.isCompleted()){
 					holder.isCompleted.setImageResource(R.drawable.check_not);
 					t.setCompleted(false);
+					if(MainActivity.status.equals("Completed tasks")){
+						items.remove(position);
+						notifyDataSetChanged();
+						MainActivity.reduceTaskCounter();
+					}
 				} else {
 					holder.isCompleted.setImageResource(R.drawable.check_done);
 					t.setCompleted(true);
+					if(MainActivity.status.equals("Pending tasks")){
+						items.remove(position);
+						notifyDataSetChanged();
+						MainActivity.reduceTaskCounter();
+					}
 				} db.updateTask(t); // update the task with the new status
 			}
 		});
 		
 		holder.popup.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				PopupMenu popup = new PopupMenu(ctx, holder.popup);
-				popup.getMenuInflater().inflate(R.menu.card, popup.getMenu());
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
-					public boolean onMenuItemClick(MenuItem item) {
-						if(item.getTitle().equals("Delete")){
-							db.deleteTask(t);
-							items.remove(position);
-							notifyDataSetChanged();
-						} else if(item.getTitle().equals("Modify")){
-							AddOrModifyTaskDialog d = new AddOrModifyTaskDialog(ctx, t, getDialog());
-							d.showDialog();
-						}
-						return true;
-					}});
-			    popup.show();
-			}
-		});
-		
+		@Override
+		public void onClick(View v) {
+			PopupMenu popup = new PopupMenu(ctx, holder.popup);
+			popup.getMenuInflater().inflate(R.menu.card, popup.getMenu());
+			popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+				public boolean onMenuItemClick(MenuItem item) {
+					if(item.getTitle().equals("Delete")){
+						db.deleteTask(t);
+						items.remove(position);
+						notifyDataSetChanged();
+						MainActivity.reduceTaskCounter();
+					} else if(item.getTitle().equals("Modify")){
+						AddOrModifyTaskDialog d = new AddOrModifyTaskDialog(ctx, t, getDialog());
+						d.showDialog();
+					}
+					return true;
+				}});
+		    popup.show();
+		}});
 		
 		//if(now.compareTo(t.getDueDate())>0){
 		if(now.getTime()>t.getDueDate().getTime()){
