@@ -8,6 +8,12 @@
         android:title="@string/action_settings"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/abc_ic_search"
+        android:title="@string/action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
+    <item
         android:id="@+id/action_sort_priority"
         android:orderInCategory="101"
         android:title="@string/action_sort_by_priority"

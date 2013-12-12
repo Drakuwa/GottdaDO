@@ -3,6 +3,7 @@
 
     <string name="app_name">GottaDO</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
     <string name="hello_world">Hello world!</string>
     <string name="test_description">This is an example long description of the task that I want to show&#8230;</string>
     <string name="test_priority_high">Priority: HIGH</string>

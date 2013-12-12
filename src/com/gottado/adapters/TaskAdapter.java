@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,6 +22,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,10 +37,12 @@ import com.gottado.ui.AddOrModifyTaskDialog;
 import com.gottado.ui.MainActivity;
 import com.gottado.utilities.MyDateFormatter;
 
-public class TaskAdapter extends BaseAdapter {
+public class TaskAdapter extends BaseAdapter implements Filterable {
 
 	private LayoutInflater mInflater;
 	private List<Task> items = new ArrayList<Task>();
+	private List<Task> itemsOriginal = new ArrayList<Task>();
+	private Filter listFilter;
 	private Context ctx;
 	private DAO db;
 	private SimpleDateFormat dateFormat = MyDateFormatter.getInstance().getDateFormat();
@@ -45,6 +50,7 @@ public class TaskAdapter extends BaseAdapter {
 	public TaskAdapter(Context context, List<Task> items) {
 		mInflater = LayoutInflater.from(context);
 		this.items = items;
+		this.itemsOriginal = items;
 		this.ctx = context;
 		db = LocalDAO.getInstance(context);
 		Calendar cal = Calendar.getInstance();
@@ -186,5 +192,59 @@ public class TaskAdapter extends BaseAdapter {
 		ImageView popup;
 		TextView category;
 		RelativeLayout rl;
+	}
+	
+	public void resetData() {
+		items = itemsOriginal;
+	}
+	
+	@Override
+	public Filter getFilter() {
+		if (listFilter == null)
+			listFilter = new ListFilter();
+		return listFilter;
+	}
+
+	private class ListFilter extends Filter {
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			FilterResults results = new FilterResults();
+			// We implement here the filter logic
+			if (constraint == null || constraint.length() == 0) {
+				// No filter implemented we return all the list
+				results.values = itemsOriginal;
+				results.count = itemsOriginal.size();
+			} else {
+				// We perform filtering operation
+				List<Task> filtered = new ArrayList<Task>();
+				for (Task t : items) {
+					if(t.getTitle() != null){
+						if(t.getTitle().toUpperCase(Locale.ENGLISH)
+								.contains(constraint.toString().toUpperCase(Locale.ENGLISH))
+								|| t.getDescription().toUpperCase(Locale.ENGLISH)
+								.contains(constraint.toString().toUpperCase(Locale.ENGLISH)))
+						filtered.add(t);
+					}
+				}
+				results.values = filtered;
+				results.count = filtered.size();
+			}
+			return results;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void publishResults(CharSequence constraint,FilterResults results) {
+			MainActivity.setTaskCounter(results.count);
+			// Now we have to inform the adapter about the new list filtered
+			if (results.count == 0){
+				//notifyDataSetInvalidated();
+				items = (List<Task>) results.values;
+				notifyDataSetChanged();}
+			else {
+				items = (List<Task>) results.values;
+				notifyDataSetChanged();
+			}
+		}
 	}
 }

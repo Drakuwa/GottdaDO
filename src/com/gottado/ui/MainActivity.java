@@ -13,10 +13,15 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -178,9 +183,42 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		// Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+		
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+	    SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+	    // Configure the search info and add any event listeners
+	    searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String s) {
+				sta.getFilter().filter(s);
+				return false;
+			}
+			@Override
+			public boolean onQueryTextChange(String s) {
+				//sta.getFilter().filter(s);
+				if(s.length()==0){sta.resetData();
+				sta.getFilter().filter(s);}
+				return false;
+			}
+		});
+	    // When using the support library, the setOnActionExpandListener() method is
+	    // static and accepts the MenuItem object as an argument
+	    MenuItemCompat.setOnActionExpandListener(searchItem, new OnActionExpandListener() {
+	        @Override
+	        public boolean onMenuItemActionCollapse(MenuItem item) {
+	            // Do something when collapsed
+	            return true;  // Return true to collapse action view
+	        }
+	        @Override
+	        public boolean onMenuItemActionExpand(MenuItem item) {
+	            // Do something when expanded
+	            return true;  // Return true to expand action view
+	        }
+	    });
+	    return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -266,6 +304,12 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		currentCount--;
 		count.setText(String.valueOf(currentCount));
 	}
+	/**
+	 * Change the task counter while filtering data
+	 */
+	public static void setTaskCounter(int c){
+		count.setText(String.valueOf(c));
+	}
 	
 	private Dialog getDialog(){
 		final Dialog dialog = new Dialog(this);
@@ -274,7 +318,7 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
     	return dialog;
 	}
 	
-	/* The click listner for ListView in the navigation drawer */
+	/* The click listener for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id){
