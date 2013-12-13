@@ -2,13 +2,18 @@ package com.gottado.ui;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -35,6 +40,7 @@ import com.gottado.dao.DAO;
 import com.gottado.dao.LocalDAO;
 import com.gottado.dom.Task;
 import com.gottado.utilities.CallBackListener;
+import com.gottado.utilities.CronJobService;
 import com.gottado.utilities.Log;
 import com.gottado.utilities.Utilities;
 
@@ -78,6 +84,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		// initialize the list view
 		initListView();
 		updateList();
+		
+		// initialize the service
+		initService();
 	}
 	
 	private void initViews(){
@@ -85,6 +94,21 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		noContent = (TextView) findViewById(R.id.taskNoContent);
 		statusTextView = (TextView) findViewById(R.id.taskStatus);
 		statusTextView.setText(status);
+	}
+	
+	private void initService(){
+		Calendar cal= Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 10);
+        cal.set(Calendar.MINUTE, 00);
+        cal.set(Calendar.SECOND, 00);
+     
+        //Start the Service since today morning, 10:00 a.m
+        Intent intent=  new Intent(this, CronJobService.class);
+        PendingIntent pIntent = PendingIntent.getService(this,0, intent, 0);
+
+        // launch it every 12 hours 
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 12*60*60*1000, pIntent);
 	}
 	
 	private void initListView(){

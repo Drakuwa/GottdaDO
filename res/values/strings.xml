@@ -56,5 +56,9 @@
     <string name="action_delete_completed">Delete completed</string>
     <string name="clear_completed">Are you sure you want to delete all completed tasks?</string>
     <string name="show_by_priority">Show by priority</string>
-
+	<string name="local_service_started">Local service started</string>
+	<string name="local_service_stopped">Local service stopped</string>
+	<string name="click_here_to_see_them_">Click here to see them.</string>
+	<string name="check_your_gottado_list_now_">Check your GottaDO list now.</string>
+    
 </resources>
