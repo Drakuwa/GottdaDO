@@ -2,6 +2,11 @@ package com.gottado.dom;
 
 import java.util.Date;
 
+/**
+ * a POJO for the Task entity
+ * @author drakuwa
+ *
+ */
 public class Task {
 	
 	private long id;
@@ -11,8 +16,10 @@ public class Task {
 	private boolean isCompleted;
 	private String category; // TODO maybe we should leave this for later
 	
+	// default constructor
 	public Task(){}
 
+	// getter and setter methods
 	public long getId() {
 		return id;
 	}

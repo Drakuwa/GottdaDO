@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.gottado.dom.Task;
 
+/**
+ * A Data Access Object interface
+ * @author drakuwa
+ *
+ */
 public interface DAO {
 	
 	// Tasks CRUD
@@ -20,7 +25,7 @@ public interface DAO {
 	
 	public List<Task> getAllTasksByPriority(String priority) throws ParseException;
 	
-	public Task getTask(long id) throws ParseException;
+	// public Task getTask(long id) throws ParseException;
 	
 	public int updateTask(Task t);
 	

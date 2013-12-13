@@ -1,5 +1,10 @@
 package com.gottado.dao;
 
+/**
+ * DAO helper class
+ * @author drakuwa
+ *
+ */
 public final class DatabaseHelper {
 
 	// Tasks Table Columns names

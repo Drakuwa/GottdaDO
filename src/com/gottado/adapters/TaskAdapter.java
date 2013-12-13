@@ -37,6 +37,11 @@ import com.gottado.ui.AddOrModifyTaskDialog;
 import com.gottado.ui.MainActivity;
 import com.gottado.utilities.MyDateFormatter;
 
+/**
+ * An adapter override for the tasks list
+ * @author drakuwa
+ *
+ */
 public class TaskAdapter extends BaseAdapter implements Filterable {
 
 	private LayoutInflater mInflater;
@@ -54,6 +59,7 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 		this.ctx = context;
 		db = LocalDAO.getInstance(context);
 		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_YEAR, -1);
 		now = cal.getTime();
 	}
 	public int getCount() {
@@ -101,7 +107,7 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 		holder.priority.setText(ctx.getResources().getString(R.string.priority_)+t.getPriority().name());
 		if(t.getPriority()==Priority.LOW){
 			holder.priority.setTextColor(ctx.getResources().getColor(R.color.yellow));
-		} else if(t.getPriority()==Priority.MEDIUM){
+		} else if(t.getPriority()==Priority.NORMAL){
 			holder.priority.setTextColor(ctx.getResources().getColor(R.color.orange));
 		} else if(t.getPriority()==Priority.HIGH){
 			holder.priority.setTextColor(ctx.getResources().getColor(R.color.darkRed));
@@ -153,11 +159,12 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 		    popup.show();
 		}});
 		
-		//if(now.compareTo(t.getDueDate())>0){
 		if(now.getTime()>t.getDueDate().getTime()){
 			holder.rl.setBackgroundResource(R.drawable.bg_card_expired);
 		} else holder.rl.setBackgroundResource(R.drawable.bg_card);
 		
+		// set an animation to the list element, slowly sliding from below
+		// to get the Google+ items effect
 		AnimationSet set = new AnimationSet(true);
         Animation animation = new AlphaAnimation(0.0f, 1.0f);
         animation.setDuration(600);
@@ -172,6 +179,10 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 		return convertView;
 	}
 	
+	/**
+	 * Get a dialog instance for the AddOrModifyTaskDialog class
+	 * @return
+	 */
 	private Dialog getDialog(){
 		final Dialog dialog = new Dialog(ctx);
     	dialog.setOnDismissListener(new OnDismissListener() {
@@ -194,6 +205,9 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 		RelativeLayout rl;
 	}
 	
+	/**
+	 * Set the items back to the original state
+	 */
 	public void resetData() {
 		items = itemsOriginal;
 	}
@@ -205,6 +219,11 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 		return listFilter;
 	}
 
+	/**
+	 * Show every task containing a certain string in the title, or description
+	 * @author drakuwa
+	 *
+	 */
 	private class ListFilter extends Filter {
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
@@ -238,7 +257,8 @@ public class TaskAdapter extends BaseAdapter implements Filterable {
 			MainActivity.setTaskCounter(results.count);
 			// Now we have to inform the adapter about the new list filtered
 			if (results.count == 0){
-				//notifyDataSetInvalidated();
+				// if we would like to show all tasks if no results, then we should call
+				// notifyDataSetInvalidated();
 				items = (List<Task>) results.values;
 				notifyDataSetChanged();}
 			else {

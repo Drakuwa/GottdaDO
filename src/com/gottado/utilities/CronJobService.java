@@ -15,6 +15,12 @@ import com.gottado.dao.DAO;
 import com.gottado.dao.LocalDAO;
 import com.gottado.ui.MainActivity;
 
+/**
+ * A Service class that should show a notification when started,
+ * notifying the user about the number of tasks he has due the current day
+ * @author drakuwa
+ *
+ */
 public class CronJobService extends Service {
 	
 	private NotificationManager mNM;

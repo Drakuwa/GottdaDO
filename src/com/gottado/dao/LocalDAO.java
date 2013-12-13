@@ -33,11 +33,11 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 	SimpleDateFormat dateFormat = MyDateFormatter.getInstance().getDateFormat();
 	// Singleton
 	private static volatile LocalDAO instance = null;
-	
+	// Constructor
 	private LocalDAO(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
-
+	// Singleton
 	public static LocalDAO getInstance(Context context) {
 		if (instance == null) {
 			synchronized (LocalDAO.class) {
@@ -72,6 +72,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		onCreate(db);
 	}
 
+	/**
+	 * Get all tasks from database
+	 */
 	@Override
 	public List<Task> getAllTasks() throws ParseException {
 		List<Task> tasksList = new ArrayList<Task>();
@@ -92,8 +95,8 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 				int typeOridnal = cursor.getInt(DatabaseHelper.COLUMN_ORDER.KEY_PRIORITY.ordinal());
 				if(typeOridnal==Priority.HIGH.getCustomOrdinal()) {
 					t.setPriority(Priority.HIGH);
-				} else if(typeOridnal==Priority.MEDIUM.getCustomOrdinal()) {
-					t.setPriority(Priority.MEDIUM);
+				} else if(typeOridnal==Priority.NORMAL.getCustomOrdinal()) {
+					t.setPriority(Priority.NORMAL);
 				} else t.setPriority(Priority.LOW);
 				String completed = cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_COMPLETED.ordinal());
 				if(completed.equals("1"))t.setCompleted(true);
@@ -107,34 +110,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		return tasksList;
 	}
 
-	@Override
-	public Task getTask(long id) throws ParseException {
-		SQLiteDatabase db = this.getReadableDatabase();
-		
-		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_TASKS + " WHERE "
-				+DatabaseHelper.KEY_ID+"="+id;
-		Cursor cursor = db.rawQuery(selectQuery, null);
-		Task t = new Task();
-		if (cursor != null){
-			cursor.moveToFirst();
-			t.setId(cursor.getLong(DatabaseHelper.COLUMN_ORDER.KEY_ID.ordinal()));
-			t.setTitle(cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_TITLE.ordinal()));
-			t.setDescription(cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_DESCRIPTION.ordinal()));
-			t.setDueDate(dateFormat.parse(cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_DATE.ordinal())));
-			int typeOridnal = cursor.getInt(DatabaseHelper.COLUMN_ORDER.KEY_PRIORITY.ordinal());
-			if(typeOridnal==Priority.HIGH.getCustomOrdinal()) {
-				t.setPriority(Priority.HIGH);
-			} else if(typeOridnal==Priority.MEDIUM.getCustomOrdinal()) {
-				t.setPriority(Priority.MEDIUM);
-			} else t.setPriority(Priority.LOW);
-			t.setCompleted(Boolean.valueOf(cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_COMPLETED.ordinal())));
-			t.setCategory(cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_CATEGORY.ordinal()));
-		}
-		db.close();
-		return t;
-	}
-
+	/**
+	 * Add a single task to the database
+	 */
 	@Override
 	public void addTask(Task t) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -151,6 +129,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		db.close(); // Closing database connection
 	}
 
+	/**
+	 * Update the task with the given new Task object
+	 */
 	@Override
 	public int updateTask(Task t) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -165,6 +146,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 				new String[] { String.valueOf(t.getId()) });
 	}
 
+	/**
+	 * Delete the particular task
+	 */
 	@Override
 	public void deleteTask(Task t) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -173,6 +157,10 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		db.close();
 	}
 
+	/**
+	 * Get all the tasks from the database, that are marked
+	 * as completed
+	 */
 	@Override
 	public List<Task> getAllCompletedTasks(boolean finished) throws ParseException {
 		List<Task> tasksList = new ArrayList<Task>();
@@ -197,8 +185,8 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 				int typeOridnal = cursor.getInt(DatabaseHelper.COLUMN_ORDER.KEY_PRIORITY.ordinal());
 				if(typeOridnal==Priority.HIGH.getCustomOrdinal()) {
 					t.setPriority(Priority.HIGH);
-				} else if(typeOridnal==Priority.MEDIUM.getCustomOrdinal()) {
-					t.setPriority(Priority.MEDIUM);
+				} else if(typeOridnal==Priority.NORMAL.getCustomOrdinal()) {
+					t.setPriority(Priority.NORMAL);
 				} else t.setPriority(Priority.LOW);
 				String completed = cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_COMPLETED.ordinal());
 				if(completed.equals("1"))t.setCompleted(true);
@@ -212,6 +200,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		return tasksList;
 	}
 
+	/**
+	 * Delete all tasks that are older then 24 hours
+	 */
 	@Override
 	public void clearExpiredTasks() {
 		SQLiteDatabase db = this.getWritableDatabase();		
@@ -220,13 +211,12 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		Date now = cal.getTime();
 		db.delete(TABLE_TASKS, "Datetime("+DatabaseHelper.KEY_DATE+") < Datetime('"+dateFormat.format(now)+"')",
 				new String[] {});
-		//String deleteQuery = "DELETE FROM "+TABLE_TASKS
-		//	+" WHERE Datetime("+DatabaseHelper.KEY_DATE+") " +
-		//		"< Datetime('"+dateFormat.format(now)+"')";
-		//db.rawQuery(deleteQuery, null);
 		db.close();		
 	}
 	
+	/**
+	 * Delete all the tasks that are marked as completed
+	 */
 	@Override
 	public void clearCompletedTasks() {
 		SQLiteDatabase db = this.getWritableDatabase();		
@@ -235,6 +225,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		db.close();		
 	}
 
+	/**
+	 * Get all the tasks that have todays date
+	 */
 	@Override
 	public List<Task> getAllTasksDueToday() throws ParseException {
 		List<Task> tasksList = new ArrayList<Task>();
@@ -262,8 +255,8 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 				int typeOridnal = cursor.getInt(DatabaseHelper.COLUMN_ORDER.KEY_PRIORITY.ordinal());
 				if(typeOridnal==Priority.HIGH.getCustomOrdinal()) {
 					t.setPriority(Priority.HIGH);
-				} else if(typeOridnal==Priority.MEDIUM.getCustomOrdinal()) {
-					t.setPriority(Priority.MEDIUM);
+				} else if(typeOridnal==Priority.NORMAL.getCustomOrdinal()) {
+					t.setPriority(Priority.NORMAL);
 				} else t.setPriority(Priority.LOW);
 				String completed = cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_COMPLETED.ordinal());
 				if(completed.equals("1"))t.setCompleted(true);
@@ -277,6 +270,9 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 		return tasksList;
 	}
 
+	/**
+	 * Get all tasks with the given priority
+	 */
 	@Override
 	public List<Task> getAllTasksByPriority(String priority)
 			throws ParseException {
@@ -301,8 +297,8 @@ public class LocalDAO extends SQLiteOpenHelper implements DAO {
 				int typeOridnal = cursor.getInt(DatabaseHelper.COLUMN_ORDER.KEY_PRIORITY.ordinal());
 				if(typeOridnal==Priority.HIGH.getCustomOrdinal()) {
 					t.setPriority(Priority.HIGH);
-				} else if(typeOridnal==Priority.MEDIUM.getCustomOrdinal()) {
-					t.setPriority(Priority.MEDIUM);
+				} else if(typeOridnal==Priority.NORMAL.getCustomOrdinal()) {
+					t.setPriority(Priority.NORMAL);
 				} else t.setPriority(Priority.LOW);
 				String completed = cursor.getString(DatabaseHelper.COLUMN_ORDER.KEY_COMPLETED.ordinal());
 				if(completed.equals("1"))t.setCompleted(true);

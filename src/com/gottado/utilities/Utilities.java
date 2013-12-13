@@ -4,15 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
-import java.util.Comparator;
-import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import com.gottado.R;
 import com.gottado.dao.DAO;
@@ -30,7 +25,7 @@ public class Utilities {
 	private Context ctx;
 	
 	/**
-	 * Constructor of the Model class which initializes the activity context.
+	 * Constructor of the Utilities class which initializes the activity context.
 	 * 
 	 * @param context
 	 */
@@ -40,7 +35,7 @@ public class Utilities {
 	
 	/**
 	 * Method that creates and shows an AlertDialog with a message passed with
-	 * the txt parameter, and a PositiveButton "OK..."
+	 * the txt parameter, and a PositiveButton "OK"
 	 * 
 	 * @param txt
 	 */
@@ -63,93 +58,6 @@ public class Utilities {
 		}
 	}
 	
-	/**
-	 * Method that creates and shows a GPS Disabled alert, and calls the
-	 * showGpsOptions() method on positive click.
-	 */
-	public void createGpsDisabledAlert() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-		builder.setMessage(
-				"Your GPS is disabled. Please edable it.")
-				.setIcon(R.drawable.ic_launcher)
-				.setTitle(R.string.app_name)
-				.setCancelable(true)
-				.setPositiveButton("Enable GPS",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								showGpsOptions();
-							}
-						});
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-	/**
-	 * Method that calls the Location settings and allows the user to enable or
-	 * disable the GPS
-	 */
-	private void showGpsOptions() {
-		Intent gpsOptionsIntent = new Intent(
-				android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		ctx.startActivity(gpsOptionsIntent);
-	}
-
-	public void createInternetDisabledAlert() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-		builder.setMessage(
-				"Your internet connection is disabled. Please enable it.")
-				.setIcon(R.drawable.ic_launcher)
-				.setTitle(R.string.app_name)
-				.setCancelable(true)
-				.setPositiveButton("Internet options",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								showNetOptions();
-							}
-						});
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-	public void showNetOptions() {
-		Intent netOptionsIntent = new Intent(
-				android.provider.Settings.ACTION_WIRELESS_SETTINGS);
-		ctx.startActivity(netOptionsIntent);
-	}
-
-	public class MapComparator implements Comparator<Map<String, ?>> {
-		private final String key;
-
-		public MapComparator(String key) {
-			this.key = key;
-		}
-
-		public int compare(Map<String, ?> first, Map<String, ?> second) {
-			// Null checking, both for maps and values
-			String firstValue = (String) first.get(key);
-			String secondValue = (String) second.get(key);
-			return firstValue.compareTo(secondValue);
-		}
-	}
-	
-	public static boolean HaveNetworkConnection(Context ctx) {
-		boolean HaveConnectedWifi = false;
-		boolean HaveConnectedMobile = false;
-
-		ConnectivityManager cm = (ConnectivityManager) ctx
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-		for (NetworkInfo ni : netInfo) {
-			if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-				if (ni.isConnected())
-					HaveConnectedWifi = true;
-			if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-				if (ni.isConnected())
-					HaveConnectedMobile = true;
-		}
-		return HaveConnectedWifi || HaveConnectedMobile;
-	}
-
 	/**
 	 * Encode toHash string into SHA1 hash and return the result
 	 * @param toHash
@@ -185,6 +93,7 @@ public class Utilities {
      * Show an alert dialog warning the user that he is about to
      * delete all expired tasks from the application. Expired tasks
      * are considered to be task which have passed their due date.
+     * (24 hours)
      */
     public void clearExpiredTasksDialog() {
     	final DAO db = LocalDAO.getInstance(ctx);

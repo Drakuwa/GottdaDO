@@ -19,7 +19,7 @@
 
     <string-array name="priority_spinner">
         <item>LOW</item>
-        <item>MEDIUM</item>
+        <item>NORMAL</item>
         <item>HIGH</item>
     </string-array>
     <string-array name="drawer_options">

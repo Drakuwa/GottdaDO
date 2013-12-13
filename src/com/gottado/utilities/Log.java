@@ -1,5 +1,10 @@
 package com.gottado.utilities;
 
+/**
+ * an override of the Android Log utilities class
+ * @author drakuwa
+ *
+ */
 public class Log {
 
     private static boolean isEnabled = true;

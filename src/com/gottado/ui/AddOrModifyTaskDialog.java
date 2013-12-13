@@ -29,6 +29,11 @@ import com.gottado.dom.Task;
 import com.gottado.utilities.Log;
 import com.gottado.utilities.MyDateFormatter;
 
+/**
+ * a dialog for crating or modifying a task
+ * @author drakuwa
+ *
+ */
 public class AddOrModifyTaskDialog {
 	
 	private Context context;
@@ -42,6 +47,13 @@ public class AddOrModifyTaskDialog {
 	public static Task task;
 	private boolean isEditing = false;
 
+	/**
+	 * constructor that receives context, a Task object if we want to modify
+	 * and a dialog instance
+	 * @param context
+	 * @param t
+	 * @param dialog
+	 */
 	public AddOrModifyTaskDialog(Context context, Task t, Dialog dialog) {
 		this.context = context;
 		// dialog = new Dialog(this.context);
@@ -58,6 +70,7 @@ public class AddOrModifyTaskDialog {
 		initViews();
 	}
 
+	// initialize the views of the dialog
 	private void initViews() {
 		
 		title = (EditText) dialog.findViewById(R.id.taskTitle);
@@ -83,8 +96,8 @@ public class AddOrModifyTaskDialog {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				if(parent.getItemAtPosition(pos).toString().equals("LOW")) {
 					task.setPriority(Priority.LOW);
-				} else if(parent.getItemAtPosition(pos).toString().equals("MEDIUM")) {
-					task.setPriority(Priority.MEDIUM);
+				} else if(parent.getItemAtPosition(pos).toString().equals("NORMAL")) {
+					task.setPriority(Priority.NORMAL);
 				} else if(parent.getItemAtPosition(pos).toString().equals("HIGH")) {
 					task.setPriority(Priority.HIGH);
 				} else Log.e(Log.TAG, "Error choosing priority");
@@ -121,15 +134,26 @@ public class AddOrModifyTaskDialog {
 		// showDialog();
 	}
 	
+	/**
+	 * show the dialog
+	 */
 	public void showDialog(){
 		dialog.show();
 	}
 
+	/**
+	 * show the date picker dialog
+	 */
 	public void showDatePickerDialog() {
 		DialogFragment newFragment = new DatePickerFragment();
 		newFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "datePicker");
 	}
 
+	/**
+	 * a DatePicker fragment
+	 * @author drakuwa
+	 *
+	 */
 	public static class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
 

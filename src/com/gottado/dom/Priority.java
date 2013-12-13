@@ -1,13 +1,18 @@
 package com.gottado.dom;
 
+/**
+ * a priority ENUM for the tasks
+ * @author drakuwa
+ *
+ */
 public enum Priority {
-	LOW, MEDIUM, HIGH;
+	LOW, NORMAL, HIGH;
 
 	public int getCustomOrdinal() {
 		switch (this) {
 		case LOW:
 			return 0;
-		case MEDIUM:
+		case NORMAL:
 			return 1;
 		case HIGH:
 			return 2;

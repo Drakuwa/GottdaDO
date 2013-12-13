@@ -44,6 +44,12 @@ import com.gottado.utilities.CronJobService;
 import com.gottado.utilities.Log;
 import com.gottado.utilities.Utilities;
 
+/**
+ * Main activity class that shows a list of tasks, a sliding drawer menu,
+ * and an action bar compatible with older Android versions
+ * @author drakuwa
+ *
+ */
 public class MainActivity extends ActionBarActivity implements CallBackListener {
 	
 	private TextView noContent;
@@ -56,10 +62,10 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 	private TextView statusTextView;
 	private static TextView count;
 	
+	// drawer variables
 	private DrawerLayout			mDrawerLayout;
 	private ListView				mDrawerList;
 	private ActionBarDrawerToggle	mDrawerToggle;
-
 	private CharSequence			mDrawerTitle;
 	private CharSequence			mTitle;
 	private String[]				mDrawerOptions;
@@ -75,10 +81,10 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		// initialize the other views
 		initViews();
 		
-		// get the db instance
+		// get the database instance
 		db = LocalDAO.getInstance(this);
 		
-		// set the callback listener to Utilities
+		// set the callback listener to the Utilities class object
 		u.setListener(this);
 		
 		// initialize the list view
@@ -89,6 +95,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		initService();
 	}
 	
+	/**
+	 * get the views references
+	 */
 	private void initViews(){
 		count = (TextView) findViewById(R.id.taskStatusCount);
 		noContent = (TextView) findViewById(R.id.taskNoContent);
@@ -96,6 +105,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		statusTextView.setText(status);
 	}
 	
+	/**
+	 * Start the service which will run every day starting 10:00 a.m
+	 */
 	private void initService(){
 		Calendar cal= Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 10);
@@ -111,6 +123,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 12*60*60*1000, pIntent);
 	}
 	
+	/**
+	 * initialize the list view
+	 */
 	private void initListView(){
 		// GET THE LIST
 		lv = (ListView) findViewById(R.id.tasksList);
@@ -123,6 +138,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		lv.setAdapter(sta);
 	}
 	
+	/**
+	 * update the list elements
+	 */
 	private void updateList(){
 		// GET YOUR TASKS
 		tasks.clear();
@@ -167,6 +185,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		count.setText(String.valueOf(tasks.size()));	
 	}
 	
+	/**
+	 * initialize the sliding drawer menu
+	 */
 	private void initDrawer(){
 		mTitle = mDrawerTitle = getTitle();
 		mDrawerOptions = getResources().getStringArray(R.array.drawer_options);
@@ -211,6 +232,7 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main, menu);
 		
+	    // initialize the search view from the action bar
 		MenuItem searchItem = menu.findItem(R.id.action_search);
 	    SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 	    // Configure the search info and add any event listeners
@@ -220,6 +242,7 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 				sta.getFilter().filter(s);
 				return false;
 			}
+			// reset the list if we clear the search field
 			@Override
 			public boolean onQueryTextChange(String s) {
 				//sta.getFilter().filter(s);
@@ -252,7 +275,8 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		// ActionBarDrawerToggle will take care of this.
 		if (mDrawerToggle.onOptionsItemSelected(item)){return true;}
 		
-	    // Handle presses on the action bar items
+	    // Handle presses on the action bar items, sort the list by
+		// priority, date or id
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
 	        	AddOrModifyTaskDialog d = new AddOrModifyTaskDialog(MainActivity.this, null, getDialog());
@@ -335,6 +359,11 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		count.setText(String.valueOf(c));
 	}
 	
+	/**
+	 * get a dialog instance for the AddOrModifyTaskDialog class
+	 * with a dismiss listener which updates the list afterwards
+	 * @return
+	 */
 	private Dialog getDialog(){
 		final Dialog dialog = new Dialog(this);
     	dialog.setOnDismissListener(new OnDismissListener() {
