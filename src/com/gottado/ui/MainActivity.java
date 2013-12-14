@@ -336,6 +336,9 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 	        case R.id.action_clear_expired:
 	        	u.clearExpiredTasksDialog();
 	            return true;
+	        case R.id.action_about:
+	        	startActivity(new Intent(MainActivity.this, AboutActivity.class));
+	            return true;
 	        case R.id.action_exit:
 	        	finish();
 	            return true;

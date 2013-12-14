@@ -39,8 +39,13 @@
         android:title="@string/action_delete_completed"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_exit"
+        android:id="@+id/action_about"
         android:orderInCategory="106"
+        android:title="@string/about"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="107"
         android:title="@string/exit"
         app:showAsAction="never"/>
 

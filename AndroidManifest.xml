@@ -31,7 +31,7 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:windowSoftInputMode="stateUnchanged" />
         <activity
-            android:name=".ChildActivity"
+            android:name=".ui.AboutActivity"
             android:label="@string/app_name"
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
