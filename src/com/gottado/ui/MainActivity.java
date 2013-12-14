@@ -52,15 +52,15 @@ import com.gottado.utilities.Utilities;
  */
 public class MainActivity extends ActionBarActivity implements CallBackListener {
 	
-	private TextView noContent;
-	private List<Task> tasks = new ArrayList<Task>();
-	private TaskAdapter sta;
-	private ListView lv;
-	private DAO db;
-	private Utilities u = new Utilities(this);
-	public static String status = "All tasks";
-	private TextView statusTextView;
-	private static TextView count;
+	private TextView 				noContent;
+	private List<Task> 				tasks = new ArrayList<Task>();
+	private TaskAdapter 			sta;
+	private ListView 				lv;
+	private DAO 					db;
+	private Utilities 				u = new Utilities(this);
+	public static String 			status = "All tasks";
+	private TextView 				statusTextView;
+	private static TextView 		count;
 	
 	// drawer variables
 	private DrawerLayout			mDrawerLayout;
@@ -198,8 +198,10 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		// opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerOptions));
+		mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, mDrawerOptions));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		mDrawerList.setItemChecked(0, true);
 		
 		// enable ActionBar app icon to behave as action to toggle nav drawer
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
