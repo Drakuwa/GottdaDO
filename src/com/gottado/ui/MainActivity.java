@@ -103,6 +103,13 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 			AddOrModifyTaskDialog d = new AddOrModifyTaskDialog(MainActivity.this, null, getDialog());
         	d.showDialog();
 		}
+		
+		// if starting from the due today notification
+		if(getIntent().hasExtra("DUE_TODAY")){
+			status = "Todays tasks";statusTextView.setText(status);
+			mDrawerList.setItemChecked(1, true);
+	    	updateList();
+		}
 	}
 	
 	/**
