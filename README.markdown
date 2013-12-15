@@ -11,6 +11,11 @@ completed tasks when you want, all with a simple select from the application men
 GottaDO also has a home screen quick add task widget that might come in handy.
 Hope you have fun, and find a good use for GottaDO.
 
+Screenshots:
+-----------
+
+![Main Screen](screenshots/Screenshot_2013-12-15-20-13-21.png "The Main screen of the application") ![Add Task](screenshots/Screenshot_2013-12-15-20-13-07.png "Add a task") ![Side Menu](screenshots/Screenshot_2013-12-15-20-13-30.png "Side menu for filtering the tasks") ![About Screen](screenshots/Screenshot_2013-12-15-20-13-47.png "About screen")
+
 Optional TODO:
 - add GottaDO task widget - **done**
 - missed call -> add to GottaDO
