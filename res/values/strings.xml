@@ -15,7 +15,7 @@
     <string name="choose_date">Choose date</string>
     <string name="title">Title</string>
     <string name="task_decription">Task decription..</string>
-    <string name="add_task">Add Task</string>
+    <string name="add_task">Add task</string>
 
     <string-array name="priority_spinner">
         <item>LOW</item>
@@ -68,7 +68,8 @@
 	    remind you when the time comes.\n\nYou can filter the list by priority, see the unfinished
 	    tasks, or the ones that you have completed, or just show the task that are due today.
 	    Search through the list and sort the results by priority, or due date, and delete all the
-	    expired or completed tasks when you want, all with a simple select from the application menu.\n\n
+	    expired or completed tasks when you want, all with a simple select from the application menu.
+	    GottaDO also contains a home screen quick add task widget that might come in handy.\n\n
 	    Hope you have fun, and find a good use for GottaDO.</string>
     
 </resources>

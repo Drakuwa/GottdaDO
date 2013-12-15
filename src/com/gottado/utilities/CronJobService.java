@@ -7,7 +7,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.gottado.R;
@@ -33,6 +36,12 @@ public class CronJobService extends Service {
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         Log.i(Log.TAG, "Started");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("isRunning", false)){
+        	Editor e = prefs.edit();
+        	e.putBoolean("isRunning", true);
+        	e.commit();
+        }
     }
 	
 	@Override
@@ -52,6 +61,14 @@ public class CronJobService extends Service {
 
         // Tell the user we stopped.
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
+        
+        // remove
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(prefs.getBoolean("isRunning", false)){
+        	Editor e = prefs.edit();
+        	e.putBoolean("isRunning", true);
+        	e.commit();
+        }
     }
 
     /**

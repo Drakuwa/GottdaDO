@@ -8,10 +8,11 @@ time comes. You can filter the list by priority, see the unfinished tasks, or th
 that you have completed, or just show the task that are due today. Search through the 
 list and sort the results by priority, or due date, and delete all the expired or 
 completed tasks when you want, all with a simple select from the application menu.
+GottaDO also has a home screen quick add task widget that might come in handy.
 Hope you have fun, and find a good use for GottaDO.
 
 Optional TODO:
-- add GottaDO task widget
+- add GottaDO task widget - **done**
 - missed call -> add to GottaDO
 - tag people (contacts) in GottaDO tasks
 - location based tasks

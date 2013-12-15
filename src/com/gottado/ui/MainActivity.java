@@ -12,10 +12,12 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -91,8 +93,16 @@ public class MainActivity extends ActionBarActivity implements CallBackListener 
 		initListView();
 		updateList();
 		
-		// initialize the service
-		initService();
+		// initialize the service if it is not already running
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		if(!prefs.getBoolean("isRunning", false))
+			initService();
+		
+		// if starting from the widget
+		if(getIntent().hasExtra("ACTION_ADD")){
+			AddOrModifyTaskDialog d = new AddOrModifyTaskDialog(MainActivity.this, null, getDialog());
+        	d.showDialog();
+		}
 	}
 	
 	/**
