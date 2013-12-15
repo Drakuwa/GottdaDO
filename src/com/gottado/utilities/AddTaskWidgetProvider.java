@@ -28,13 +28,17 @@ public class AddTaskWidgetProvider extends AppWidgetProvider {
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 					R.layout.widget_quick_add);
 			
-			Intent configIntent = new Intent(context, MainActivity.class);
-			configIntent.putExtra("ACTION_ADD", true);
-			configIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		    PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent intent = new Intent(context, MainActivity.class);
+			intent.putExtra("ACTION_ADD", true);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			// add a different request id ((int) System.currentTimeMillis())
+			// so the pending intent doesn't mix with the notification pending intent
+		    PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		    
 		    // start the application
-		    remoteViews.setOnClickPendingIntent(R.id.addTask, configPendingIntent);
+		    remoteViews.setOnClickPendingIntent(R.id.addTask, pendingIntent);
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
 	}

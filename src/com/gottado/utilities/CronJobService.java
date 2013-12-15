@@ -87,12 +87,20 @@ public class CronJobService extends Service {
         if(tasksCount != 0){
         	// show a notification if there are tasks due today
         	// Set the icon, scrolling text and timestamp
-            Notification notification = new Notification(R.drawable.ic_launcher, getString(R.string.check_your_gottado_list_now_),
-                    System.currentTimeMillis());
+            Notification notification = new Notification(R.drawable.ic_launcher, 
+            		getString(R.string.check_your_gottado_list_now_), System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, MainActivity.class), 0);
+            Intent configIntent = new Intent(this, MainActivity.class);
+			configIntent.putExtra("DUE_TODAY", true);
+			configIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			configIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			configIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			// add a different request id ((int) System.currentTimeMillis())
+			// so the pending intent doesn't mix with the widget pending intent
+		    PendingIntent contentIntent = PendingIntent.getActivity(this, 
+		    		(int) System.currentTimeMillis(), configIntent, 
+		    		PendingIntent.FLAG_UPDATE_CURRENT);
 
             // Set the info for the views that show in the notification panel.
             notification.setLatestEventInfo(this, "You have "+tasksCount+" tasks due today.", 
