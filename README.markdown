@@ -16,8 +16,3 @@ Screenshots:
 
 ![Main Screen](http://git.toptal.com/gkalman/bojan-ilievski-project/raw/master/screenshots/Screenshot_2013-12-15-20-13-21.png "The Main screen of the application") ![Add Task](http://git.toptal.com/gkalman/bojan-ilievski-project/raw/master/screenshots/Screenshot_2013-12-15-20-13-07.png "Add a task") ![Side Menu](http://git.toptal.com/gkalman/bojan-ilievski-project/raw/master/screenshots/Screenshot_2013-12-15-20-13-30.png "Side menu for filtering the tasks") ![About Screen](http://git.toptal.com/gkalman/bojan-ilievski-project/raw/master/screenshots/Screenshot_2013-12-15-20-13-47.png "About screen")
 
-Optional TODO:
-- add GottaDO task widget - **done**
-- missed call -> add to GottaDO
-- tag people (contacts) in GottaDO tasks
-- location based tasks
